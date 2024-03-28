@@ -58,6 +58,12 @@ def multiply_me(number_1: int, number_2: int):
     mult = number_1*number_2
     return {"product": mult}
 
+# New endpoint for Lab6:
+@app.get("/power{number_1}/{number_2}")
+def power_me(number_1: int, number_2: int):
+    power = number_1**number_2
+    return {"result": power}
+
 ## Parameters
 # Introduce parameter data types and defaults from the Optional library
 @app.get("/items/{item_id}")
