@@ -52,6 +52,12 @@ def subtract_me(number_1: int, number_2: int):
     subtract = number_2 - number_1
     return {"answer": subtract}
 
+# New endpoint for Lab6:
+@app.get("/multiply{number_1}/{number_2}")
+def multiply_me(number_1: int, number_2: int):
+    mult = number_1*number_2
+    return {"product": mult}
+
 ## Parameters
 # Introduce parameter data types and defaults from the Optional library
 @app.get("/items/{item_id}")
