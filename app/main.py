@@ -46,6 +46,12 @@ def divide_me(number_1: int, number_2: int):
     div = number_2/number_1
     return {"quotient": div}
 
+# New endpoint for Lab6:
+@app.get("/subtract{number_1}/{number_2}")
+def subtract_me(number_1: int, number_2: int):
+    subtract = number_2 - number_1
+    return {"answer": subtract}
+
 ## Parameters
 # Introduce parameter data types and defaults from the Optional library
 @app.get("/items/{item_id}")
