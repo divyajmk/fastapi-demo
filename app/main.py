@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+import os
+import MySQLdb
+from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI
 from typing import Optional
 from pydantic import BaseModel
@@ -9,13 +12,19 @@ import requests
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static", html=True), name="static")
+
+DBHOST = os.environ.get('DBHOST')
+DBUSER = os.environ.get('DBUSER')
+DBPASS = os.environ.get('DBPASS')
+DB = "yaq7fm"  # replace with your UVA computing ID / database name
+
 # The URL for this API has a /docs endpoint that lets you see and test
 # your various endpoints/methods.
 
 
 # The zone apex is the 'default' page for a URL
 # This will return a simple hello world via GET method.
-
 @app.get("/")  # zone apex
 def zone_apex():
     return {"Hello": "World Wide Web"}
@@ -28,7 +37,6 @@ def github_user_repos(user):
     return {"repos": body}
 
     
-
 # Endpoints and Methods
 # /blah - endpoint
 # GET/POST/DELETE/PATCH - methods
@@ -63,6 +71,26 @@ def multiply_me(number_1: int, number_2: int):
 def power_me(number_1: int, number_2: int):
     power = number_1**number_2
     return {"result": power}
+
+# Endpoint for Data Project 
+@app.get("/albums")
+def get_albums():
+    db = MySQLdb.connect(host=DBHOST, user=DBUSER, passwd=DBPASS, db=DB)
+    c = db.cursor(MySQLdb.cursors.DictCursor)
+    c.execute("""SELECT * FROM albums ORDER BY name""")
+    results = c.fetchall()
+    db.close()
+    return results 
+
+# Endpoint for Data Project 
+@app.get("/albums/{id}")
+def get_albums(id):
+    db = MySQLdb.connect(host=DBHOST, user=DBUSER, passwd=DBPASS, db=DB)
+    c = db.cursor(MySQLdb.cursors.DictCursor)
+    c.execute("SELECT * FROM albums WHERE id=" + id)
+    results = c.fetchall()
+    db.close()
+    return results 
 
 ## Parameters
 # Introduce parameter data types and defaults from the Optional library
